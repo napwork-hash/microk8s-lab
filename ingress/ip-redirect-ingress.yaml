@@ -3,7 +3,8 @@ kind: Ingress
 metadata:
   name: ip-redirect-ingress
   annotations:
-    nginx.ingress.kubernetes.io/permanent-redirect: https://lab.napskytech.com$request_uri
+    nginx.ingress.kubernetes.io/server-snippet: |
+      return 301 https://lab.napskytech.com$request_uri;
 spec:
   ingressClassName: public
   rules:
