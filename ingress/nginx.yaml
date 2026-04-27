@@ -1,8 +1,8 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx-service
-spec: 
+  name: nginx-ingress
+spec:
   rules:
     - host: lab.napskytech.com
       http:
@@ -11,6 +11,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: nginx-deployment
+                name: nginx-service
                 port:
                   number: 8080
