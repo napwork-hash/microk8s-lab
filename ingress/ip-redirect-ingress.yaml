@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ip-redirect-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/permanent-redirect: https://lab.napskytech.com$request_uri
+spec:
+  ingressClassName: public
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
