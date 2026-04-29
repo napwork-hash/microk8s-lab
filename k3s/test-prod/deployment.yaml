@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: portfolio-prod
+  namespace: portfolio-prod
+  labels:
+    app: portfolio-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: portfolio-prod
+  template:
+    metadata:
+      labels:
+        app: portfolio-prod
+    spec:
+      containers:
+        - name: portfolio-prod
+          image: ghcr.io/naffsisky/portfolio:latest  # ganti ini
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: HOSTNAME
+              value: "0.0.0.0"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30

@@ -1,0 +1,38 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: portfolio-prod-hpa
+  namespace: portfolio-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: portfolio-prod
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 60  # tunggu 1 menit sebelum mulai scale down
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60            # turunkan max 1 pod per menit
+    scaleUp:
+      stabilizationWindowSeconds: 30   # tunggu 30 detik sebelum scale up
+      policies:
+        - type: Pods
+          value: 1
+          periodSeconds: 60            # naikkan max 1 pod per menit

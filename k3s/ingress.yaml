@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-napskytech-ingress
+  namespace: portfolio-dev
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-test"   # sesuaikan nama issuer kamu
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - test.napskytech.com
+      secretName: test-napskytech-tls
+  rules:
+    - host: test.napskytech.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: test-napskytech-svc
+                port:
+                  number: 80
